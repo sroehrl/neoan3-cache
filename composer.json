@@ -1,0 +1,13 @@
+{
+    "name": "neoan3-apps/cache",
+    "description": "Caching based on output buffer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "neoan",
+            "email": "neoan@neoan.us"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
