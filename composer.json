@@ -8,6 +8,13 @@
             "email": "neoan@neoan.us"
         }
     ],
+    "version": "0.0.1",
+    "autoload": {
+        "psr-4": {
+          "Neoan3\\Apps\\": "./"
+        }
+
+      },
     "minimum-stability": "dev",
     "require": {}
 }
