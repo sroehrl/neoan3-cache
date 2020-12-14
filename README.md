@@ -32,10 +32,11 @@ This is especially useful if you render static pages server-side after computati
 
 ### setCaching
 
-`Neoan3\Apps\Cache::setCaching( bool | strtotime-expression )`
+`Neoan3\Apps\Cache::setCaching( strtotime-expression, ['fileEnding'] )`
 
-If set to true, caching will generate an "immortal" cache. When a strtotime expression is used,
-the cache is invalidated AFTER the request was loaded beyond the lifespan.
+The first parameter expresses the lifetime of the cached file. Use a negative
+strtotime-expression. The second parameter overwrites the default value
+`['Controller.php']`, which holds values controlling what strings must be included in file-names for the files to be cached.
 
 ### write
 
