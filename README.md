@@ -13,7 +13,7 @@ This is especially useful if you render static pages server-side after computati
 
     ```PHP 
     function __construct() {
-        Neoan3\Apps\Cache::setCaching('+2 hours');
+        Neoan3\Apps\Cache::setCaching('-2 hours');
         parent::__construct();
     }
     ```
