@@ -10,22 +10,28 @@ namespace Neoan3\Apps;
  * @package Neoan3\Apps
  */
 class Cache {
-    /**
-     * @var bool
-     */
-    private static $_caching = false;
+    private static array $cachable = ['Controller.php'];
+
     /**
      * @var string
      */
-    private static $_parameterString = '_';
+    private static string $_caching = '';
+    /**
+     * @var string
+     */
+    private static string $_parameterString = '_';
 
     /**
      * Activate / deactivate caching
      * You may place a strtotime expression in here
      *
      * @param bool|string $delay
+     * @param array $cachable
      */
-    static function setCaching($delay) {
+    static function setCaching($delay, $cachable=[]) {
+        if(!empty($cachable)){
+            self::$cachable = $cachable;
+        }
         self::$_caching = $delay;
         if($delay) {
             self::extractParameters();
@@ -54,7 +60,7 @@ class Cache {
             include $file;
             echo '<!-- cached neoan3 output -->';
             // performance: invalidate after
-            if(is_string(self::$_caching) && strtotime(self::$_caching) < filemtime($file)) {
+            if(is_string(self::$_caching) && strtotime(self::$_caching) > filemtime($file)) {
                 unlink($file);
                 echo '<!-- cache cleared/dev: reload -->';
             }
@@ -136,10 +142,17 @@ class Cache {
     private static function findComponent() {
         $trace = debug_backtrace();
         foreach($trace as $i => $file) {
-            if($i > 0 && $file['file'] !== __FILE__ && strpos($file['file'], '.ctrl.php') !== false) {
-                $parts = explode(DIRECTORY_SEPARATOR, $file['file']);
-                $folder = substr($file['file'], 0, -1 * strlen(end($parts)));
-                return $folder;
+            if($i > 0 && $file['file'] !== __FILE__) {
+                $hit = false;
+                foreach (self::$cachable as $fileToFind){
+                    if( strpos($file['file'], $fileToFind) !== false) {
+                        $hit = true;
+                    }
+                }
+                if($hit){
+                    $parts = explode(DIRECTORY_SEPARATOR, $file['file']);
+                    return substr($file['file'], 0, -1 * strlen(end($parts)));
+                }
             }
         }
         return false;
